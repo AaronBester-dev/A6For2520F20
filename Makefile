@@ -1,7 +1,7 @@
 CC = gcc
 CFLAGS = -std=c99 -Wall -pedantic
 
-all: buildidx key2val val2key actors bacon1 
+all: buildidx key2val val2key  
 
 util.o: util.c
 	$(CC) $(CFLAGS) -c util.c -o util.o
@@ -25,7 +25,7 @@ bacon1.o: bacon1.c
 	$(CC) $(CFLAGS) -c bacon1.c -o bacon1.o
 
 buildidx: buildidx.o hashfn.o util.o
-    $(CC) $(CFLAGS) buildidx.o hashfn.o util.o -o buildidx
+	$(CC) $(CFLAGS) buildidx.o hashfn.o util.o -o buildidx
 
 key2val: key2val.o hashfn.o util.o
 	$(CC) $(CFLAGS) key2val.o hashfn.o util.o -o key2val
