@@ -25,43 +25,44 @@ int main(int argc, char * argv[]){
         FILE * valueFile = NULL;
        
         if((keyAndValueFile = fopen(argv[1],"rb")) != NULL){
-          strcpy(fileName,argv[1]);
-          fileName[strlen(fileName)-1] = 'h';
-          fileName[strlen(fileName)] = 's';
-          keyFile = fopen(fileName,"wb+");
+            strcpy(fileName,argv[1]);
+            fileName[strlen(fileName)-1] = 'h';
+            fileName[strlen(fileName)] = 's';
+            keyFile = fopen(fileName,"wb+");
 
-          fileName[strlen(fileName)-3] = 'v';
-          valueFile = fopen(fileName,"wb+");
-          write_empty(keyFile,capacity);
+            fileName[strlen(fileName)-3] = 'v';
+            valueFile = fopen(fileName,"wb+");
+            write_empty(keyFile,capacity);
            
-          write_empty(valueFile,capacity);
+            write_empty(valueFile,capacity);
          
-          while(read_keyval(keyAndValueFile,keyString,valueString) == 2){
-              keyHashNum = hashfn(keyString,capacity);
-              valHashNum = hashfn(valueString,capacity);
-              index = i;
-              read_index(keyFile,keyHashNum,&index);
+            while(read_keyval(keyAndValueFile,keyString,valueString) == 2){
+                keyHashNum = hashfn(keyString,capacity);
+                valHashNum = hashfn(valueString,capacity);
+                index = i;
+                read_index(keyFile,keyHashNum,&index);
               
-              while(index != -1){
-                  read_index(keyFile,keyHashNum,&index);
-                  keyHashNum++;
-                  if(keyHashNum >= capacity){
-                    keyHashNum = 0;
-                  }
-              }
-              write_index(keyFile,i,keyHashNum);
-              index = i;
-              read_index(valueFile,valHashNum,&index); 
-              while(index != -1){
-                read_index(valueFile,valHashNum,&index);    
-                valHashNum++;
-                if(valHashNum >= capacity){
-                  valHashNum = 0;
+                while(index != -1){
+                    read_index(keyFile,keyHashNum,&index);
+                    keyHashNum++;
+                    if(keyHashNum >= capacity){
+                        keyHashNum = 0;
+                    }
                 }
-              }
-              write_index(valueFile,i,valHashNum);
-              i++;
-          }
+
+                write_index(keyFile,i,keyHashNum);
+                index = i;
+                read_index(valueFile,valHashNum,&index); 
+                while(index != -1){
+                    read_index(valueFile,valHashNum,&index);    
+                    valHashNum++;
+                    if(valHashNum >= capacity){
+                        valHashNum = 0;
+                    }
+                }
+                write_index(valueFile,i,valHashNum);
+                i++;
+            }
         }
         else{
             fprintf( stderr, "Error: %s can't be found\n", argv[1]);

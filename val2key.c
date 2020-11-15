@@ -13,7 +13,6 @@ int main(int argc, char * argv[]){
     }
     
     char fileName[sizeof(argv[1])+1];
-    char * searchTerm = argv[2];
     char keyString[256];
     char valString[256];
     int fileSize = 0;
@@ -24,18 +23,21 @@ int main(int argc, char * argv[]){
     int counter = 0;
 
     keyAndValFile = fopen(argv[1],"rb");
-    strcpy(fileName,strtok(argv[1],".kv"));
-    strcat(fileName,".vhs\0");
+    strcpy(fileName,argv[1]);
+    fileName[strlen(fileName)-2] = 'v';
+    fileName[strlen(fileName)-1] = 'h';
+    fileName[strlen(fileName)] = 's';
+
     valFile = fopen(fileName,"rb");
 
     fileSize = get_capacity(valFile);
  
-    hashNum = hashfn(searchTerm,fileSize);
+    hashNum = hashfn(argv[2],fileSize);
     
-    while(counter >= fileSize){
+    while(counter <= fileSize){
         read_index(valFile,hashNum,&index);
         read_val(keyAndValFile,index,valString);
-        if(strcmp(keyString,searchTerm) == 0){
+        if(strcmp(valString,argv[2]) == 0){
             read_key(keyAndValFile,index,keyString);
             printf("%s\n",keyString);
             fclose(keyAndValFile);

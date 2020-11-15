@@ -13,7 +13,6 @@ int main(int argc, char * argv[]){
     }
     
     char fileName[sizeof(argv[1])+1];
-    char * searchTerm = argv[2];
     char keyString[256];
     char valString[256];
     int fileSize = 0;
@@ -27,16 +26,16 @@ int main(int argc, char * argv[]){
     strcpy(fileName,argv[1]);
     fileName[strlen(fileName)-1] = 'h';
     fileName[strlen(fileName)] = 's';
+
     keyFile = fopen(fileName,"rb");
 
     fileSize = get_capacity(keyFile);
- 
-    hashNum = hashfn(searchTerm,fileSize);
+    hashNum = hashfn(argv[2],fileSize);
     
-    while(counter >= fileSize){
+    while(counter <= fileSize){
         read_index(keyFile,hashNum,&index);
         read_key(keyAndValFile,index,keyString);
-        if(strcmp(keyString,searchTerm) == 0){
+        if(strcmp(keyString,argv[2]) == 0){
             read_val(keyAndValFile,index,valString);
             printf("%s\n",valString);
             fclose(keyAndValFile);
