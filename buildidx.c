@@ -3,6 +3,9 @@
 #include <string.h>
 #include "hashfn.h"
 #include "util.h"
+#include "helper.h"
+
+void getFilename(char * fileName,char * fileExtension,char * placeToStoreFileName);
 
 int main(int argc, char * argv[]){
     if(argc != 3){
@@ -10,7 +13,7 @@ int main(int argc, char * argv[]){
         exit(-1);
     }
     else{
-        char fileName[sizeof(argv[1])+1];
+        char fileName[strlen(argv[1])+1];
         char * capacityString = argv[2];
         char * tempPtr;
         char keyString[256];
@@ -25,12 +28,10 @@ int main(int argc, char * argv[]){
         FILE * valueFile = NULL;
        
         if((keyAndValueFile = fopen(argv[1],"rb")) != NULL){
-            strcpy(fileName,argv[1]);
-            fileName[strlen(fileName)-1] = 'h';
-            fileName[strlen(fileName)] = 's';
+            getFilename(argv[1],".khs",fileName);
             keyFile = fopen(fileName,"wb+");
-
-            fileName[strlen(fileName)-3] = 'v';
+            getFilename(argv[1],".vhs",fileName);
+            
             valueFile = fopen(fileName,"wb+");
             write_empty(keyFile,capacity);
            
@@ -74,4 +75,10 @@ int main(int argc, char * argv[]){
         
 
     }
+}
+
+void getFilename(char * fileName,char * fileExtension,char * placeToStoreFileName){
+    strcpy(placeToStoreFileName,fileName);
+    placeToStoreFileName[strlen(fileName)-4] = '\0';
+    strcat(placeToStoreFileName,fileExtension);
 }

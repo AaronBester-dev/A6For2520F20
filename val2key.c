@@ -4,7 +4,7 @@
 #include "hashfn.h"
 #include "util.h"
 
-int getSizeOfFile(FILE * fp);
+void getFilename(char * fileName,char * fileExtension,char * placeToStoreFileName);
 
 int main(int argc, char * argv[]){
     if(argc != 3){
@@ -12,7 +12,7 @@ int main(int argc, char * argv[]){
         exit(-1);
     }
     
-    char fileName[sizeof(argv[1])+1];
+    char fileName[strlen(argv[1])+1];
     char keyString[256];
     char valString[256];
     int fileSize = 0;
@@ -23,11 +23,7 @@ int main(int argc, char * argv[]){
     int counter = 0;
 
     keyAndValFile = fopen(argv[1],"rb");
-    strcpy(fileName,argv[1]);
-    fileName[strlen(fileName)-2] = 'v';
-    fileName[strlen(fileName)-1] = 'h';
-    fileName[strlen(fileName)] = 's';
-
+    getFilename(argv[1],".vhs",fileName);
     valFile = fopen(fileName,"rb");
 
     fileSize = get_capacity(valFile);
@@ -58,3 +54,8 @@ int main(int argc, char * argv[]){
     return(0);
 }
 
+void getFilename(char * fileName,char * fileExtension,char * placeToStoreFileName){
+    strcpy(placeToStoreFileName,fileName);
+    placeToStoreFileName[strlen(fileName)-4] = '\0';
+    strcat(placeToStoreFileName,fileExtension);
+}
