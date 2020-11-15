@@ -23,16 +23,13 @@ int main(int argc, char * argv[]){
     char keyString[256];
     char valString[256];
 
-    int fileSizeOFPrincipalsKey = 0;
-    int fileSizeOfNameBasicsKey = 0;
-    int fileSizeOfTitleBasicsValue = 0;
     int counter = 0;
     int index = 0;
     int hashNum = 0;
     int foundOne = 0;
-    fileSizeOFPrincipalsKey = get_capacity(titlePrincipalsKey);
-    fileSizeOfNameBasicsKey = get_capacity(nameBasicsKey);
-    fileSizeOfTitleBasicsValue = get_capacity(titleBasicsValue);
+    int fileSizeOFPrincipalsKey = get_capacity(titlePrincipalsKey);
+    int fileSizeOfNameBasicsKey = get_capacity(nameBasicsKey);
+    int fileSizeOfTitleBasicsValue = get_capacity(titleBasicsValue);
     
     val2KeyMiniVersion(fileSizeOfTitleBasicsValue,titleBasicsValue,titleBasicsKeyAndValues,argv[1]);
 
@@ -52,7 +49,12 @@ int main(int argc, char * argv[]){
             }
         }
     }
-
+    fclose(titleBasicsKeyAndValues);
+    fclose(titleBasicsValue);
+    fclose(titlePrincipalsKey);
+    fclose(titlePrincipalsKeyAndValues);
+    fclose(nameBasicsKey);
+    fclose(nameBasicsKeyAndValues);
     return(0);
 
 }

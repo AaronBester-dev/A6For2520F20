@@ -1,7 +1,7 @@
 CC = gcc
 CFLAGS = -std=c99 -Wall -pedantic
 
-all: buildidx key2val val2key  actors
+all: buildidx key2val val2key  actors bacon1
 
 util.o: util.c
 	$(CC) $(CFLAGS) -c util.c -o util.o
