@@ -30,7 +30,7 @@ int main(int argc, char * argv[]){
  
     hashNum = hashfn(argv[2],fileSize);
     
-    while(counter <= fileSize){
+    while(counter < fileSize){
         read_index(valFile,hashNum,&index);
         read_val(keyAndValFile,index,valString);
         if(strcmp(valString,argv[2]) == 0){

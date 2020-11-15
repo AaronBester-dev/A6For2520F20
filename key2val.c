@@ -30,7 +30,7 @@ int main(int argc, char * argv[]){
     fileSize = get_capacity(keyFile);
     hashNum = hashfn(argv[2],fileSize);
     
-    while(counter <= fileSize){
+    while(counter < fileSize){
         read_index(keyFile,hashNum,&index);
         read_key(keyAndValFile,index,keyString);
         if(strcmp(keyString,argv[2]) == 0){
