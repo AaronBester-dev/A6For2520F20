@@ -16,8 +16,8 @@ int main(int argc, char * argv[]){
         char fileName[strlen(argv[1])+1];
         char * capacityString = argv[2];
         char * tempPtr;
-        char keyString[256];
-        char valueString[256];
+        char keyString[STRLEN];
+        char valueString[STRLEN];
         long capacity = strtol(capacityString,&tempPtr,10);
         int i = 0;
         int index = 0;
@@ -34,7 +34,6 @@ int main(int argc, char * argv[]){
             
             valueFile = fopen(fileName,"wb+");
             write_empty(keyFile,capacity);
-           
             write_empty(valueFile,capacity);
          
             while(read_keyval(keyAndValueFile,keyString,valueString) == 2){

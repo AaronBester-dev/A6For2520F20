@@ -20,8 +20,8 @@ int main(int argc, char * argv[]){
     FILE * titleBasicsKeyAndValues = fopen("title.basics.kv","rb");
 
 
-    char keyString[256];
-    char valString[256];
+    char keyString[STRLEN];
+    char valString[STRLEN];
 
     int counter = 0;
     int index = 0;
@@ -30,25 +30,24 @@ int main(int argc, char * argv[]){
     int fileSizeOFPrincipalsKey = get_capacity(titlePrincipalsKey);
     int fileSizeOfNameBasicsKey = get_capacity(nameBasicsKey);
     int fileSizeOfTitleBasicsValue = get_capacity(titleBasicsValue);
+    int switched = 0;
     
     val2KeyMiniVersion(fileSizeOfTitleBasicsValue,titleBasicsValue,titleBasicsKeyAndValues,argv[1]);
+    
 
-    while( (counter < fileSizeOFPrincipalsKey) && ((foundOne != 1) || (strcmp(keyString,argv[1]) == 0))){
+    
+    while( (counter < fileSizeOFPrincipalsKey)){
         read_index(titlePrincipalsKey,hashNum,&index);
         read_key(titlePrincipalsKeyAndValues,index,keyString);
+        printf("%s\n",keyString);
         if(strcmp(keyString,argv[1]) == 0){
             foundOne = 1;
             read_val(titlePrincipalsKeyAndValues,index,valString);
-            key2ValMiniVersion(fileSizeOfNameBasicsKey,nameBasicsKey,nameBasicsKeyAndValues,valString);
+            key2ValMiniVersion(fileSizeOfNameBasicsKey,nameBasicsKey,nameBasicsKeyAndValues,valString);  
         }
-        else{
-            hashNum++;
-            counter++;
-            if(hashNum >= fileSizeOFPrincipalsKey){
-                hashNum = 0;
-            }
-        }
+        counter++;
     }
+
     fclose(titleBasicsKeyAndValues);
     fclose(titleBasicsValue);
     fclose(titlePrincipalsKey);
@@ -66,7 +65,9 @@ int key2ValMiniVersion(int fileSize, FILE * keyFile, FILE * keyAndValFile, char 
     char valString[256];
     int hashNum = 0;
     hashNum = hashfn(whatToLookFor,fileSize);
+    
      while(counter < fileSize){
+       
         read_index(keyFile,hashNum,&index);
         read_key(keyAndValFile,index,keyString);
         if(strcmp(keyString,whatToLookFor) == 0){

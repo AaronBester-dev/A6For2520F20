@@ -19,7 +19,6 @@ int main(int argc, char * argv[]){
     FILE * titlePrincipalsKey = fopen("title.principals.khs","rb");
     FILE * nameBasicsValues = fopen("name.basics.vhs","rb");
     FILE * nameBasicsKeyAndValues = fopen("name.basics.kv","rb");
-    FILE * titleBasicsValue = fopen("title.basics.vhs","rb");
     FILE * titleBasicsKeyAndValues = fopen("title.basics.kv","rb");
     FILE * titleBasicsKey = fopen("title.basics.khs","rb");
 
@@ -28,6 +27,7 @@ int main(int argc, char * argv[]){
     int fileSizeOFPrincipalsKey = get_capacity(titlePrincipalsKey);
     int fileSizeOfTitleBasicsKey = get_capacity(titleBasicsKey);
     int hashNum = 0; 
+    int originalHashnum = 0;
     int kevinBaconMovieHashNum = 0;
     int peopleInMovieHashNum = 0;
     int kevinBaconMovieCounter = 0;
@@ -36,12 +36,12 @@ int main(int argc, char * argv[]){
     int actorFound = 0;
     int exitProgram = 0;
     int getNextMovie = 0;
-    char kevinBaconMovieKey[256];
-    char keyOfKevinBacon[256];
-    char keyOfActorWhoStarsWithKevinBacon[256];
-    char keyOfMovieKevinBaconIsIn[256];
-    char actorKey[256];
-    char movieTheyAreBothIn[256];
+    char kevinBaconMovieKey[STRLEN];
+    char keyOfKevinBacon[STRLEN];
+    char keyOfActorWhoStarsWithKevinBacon[STRLEN];
+    char keyOfMovieKevinBaconIsIn[STRLEN];
+    char actorKey[STRLEN];
+    char movieTheyAreBothIn[STRLEN];
  
     /*Getting users person key*/
     hashNum = hashfn(argv[1],fileSizeOfNameBasicsValue);
@@ -58,16 +58,15 @@ int main(int argc, char * argv[]){
 
     while( (kevinBaconMovieCounter < fileSizeOFPrincipalsValue) && exitProgram == 0){
         movieFound = 0;
-        val2KeyMiniVersion(titlePrincipalsValue,titlePrincipalsKeyAndValues,keyOfKevinBacon,kevinBaconMovieHashNum,kevinBaconMovieKey);
+       val2KeyMiniVersion(titlePrincipalsValue,titlePrincipalsKeyAndValues,keyOfKevinBacon,kevinBaconMovieHashNum,kevinBaconMovieKey);
         kevinBaconMovieHashNum++;
         kevinBaconMovieCounter++;
         if(kevinBaconMovieHashNum >= fileSizeOFPrincipalsValue){
             kevinBaconMovieHashNum = 0;
         }
-        if(movieFound == 1 && strcmp(kevinBaconMovieKey,"NOT FOUND") == 0){
-            exitProgram = 1;
-        }
         
+         
+
         if(strcmp(kevinBaconMovieKey,"NOT FOUND") != 0){
             movieFound = 1;
             /*getting key of people in said movie*/
@@ -83,13 +82,11 @@ int main(int argc, char * argv[]){
                 if(peopleInMovieHashNum >= fileSizeOFPrincipalsKey){
                     peopleInMovieHashNum = 0;
                 }
-                if(actorFound == 1 && strcmp(actorKey,"NOT FOUND") == 0){
-                    getNextMovie = 1;
-                }
+                
 
                 if(strcmp(actorKey,"NOT FOUND") != 0){
                     actorFound = 1;
-                    
+                    /*Getting key of movie if person exists in it*/
                     if(strcmp(actorKey,keyOfActorWhoStarsWithKevinBacon) == 0){
                         peopleInMovieHashNum = hashfn(kevinBaconMovieKey,fileSizeOfTitleBasicsKey);
                         key2ValMiniVersion(titleBasicsKey,titleBasicsKeyAndValues,kevinBaconMovieKey,peopleInMovieHashNum,movieTheyAreBothIn);
@@ -97,14 +94,26 @@ int main(int argc, char * argv[]){
                         return(0);
                     }
                 }
-    /*Getting key of movie if person exists in it*/
+                else{
+                    if(actorFound == 1){
+                        getNextMovie = 1;
+                    }
+                }
+    
             
            
             }
         }
     }
     
-
+    fclose(titlePrincipalsKey);
+    fclose(titlePrincipalsValue);
+    fclose(titlePrincipalsKeyAndValues);
+    fclose(nameBasicsKeyAndValues);
+    fclose(nameBasicsValues);
+    fclose(titleBasicsKey);
+    fclose(titleBasicsKeyAndValues);
+    
 }
 
 void val2KeyMiniVersion(FILE * valFile, FILE * keyAndValFile, char * whatToLookFor,int hashNum,char * whereToPutIt){

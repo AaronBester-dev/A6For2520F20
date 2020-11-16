@@ -13,8 +13,8 @@ int main(int argc, char * argv[]){
     }
     
     char fileName[strlen(argv[1])+1];
-    char keyString[256];
-    char valString[256];
+    char keyString[STRLEN];
+    char valString[STRLEN];
     int fileSize = 0;
     FILE * keyAndValFile;
     FILE * keyFile;
