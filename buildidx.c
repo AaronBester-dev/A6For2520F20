@@ -3,10 +3,10 @@
 #include <string.h>
 #include "hashfn.h"
 #include "util.h"
-#include "helper.h"
+
 
 void getFilename(char * fileName,char * fileExtension,char * placeToStoreFileName);
-
+/*Builds a database of every movie given to by a kv file */
 int main(int argc, char * argv[]){
     if(argc != 3){
         fprintf( stderr, "Usage: %s filename.kv capacity\n", argv[0]);
@@ -77,7 +77,7 @@ int main(int argc, char * argv[]){
         fclose(valueFile);
     }
 }
-
+/*Gets the filename of the khs and vhs files*/
 void getFilename(char * fileName,char * fileExtension,char * placeToStoreFileName){
     strcpy(placeToStoreFileName,fileName);        
     placeToStoreFileName[strlen(fileName)-3] = '\0';

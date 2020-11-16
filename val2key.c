@@ -6,6 +6,7 @@
 
 void getFilename(char * fileName,char * fileExtension,char * placeToStoreFileName);
 
+/*Gets the key from a kv file at the index given to by the value*/
 int main(int argc, char * argv[]){
     if(argc != 3){
         fprintf( stderr, "Usage: %s filename.kv 'search term'\n", argv[0]);
@@ -53,7 +54,7 @@ int main(int argc, char * argv[]){
     printf("NOT FOUND\n");
     return(0);
 }
-
+/*Gets the filename of the khs and vhs files*/
 void getFilename(char * fileName,char * fileExtension,char * placeToStoreFileName){
     strcpy(placeToStoreFileName,fileName);
     placeToStoreFileName[strlen(fileName)-3] = '\0';
