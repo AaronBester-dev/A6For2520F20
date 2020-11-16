@@ -26,12 +26,13 @@ int main(int argc, char * argv[]){
     getFilename(argv[1],".vhs",fileName);
     valFile = fopen(fileName,"rb");
     fileSize = get_capacity(valFile);
- 
+
     hashNum = hashfn(argv[2],fileSize);
-    
+
     while(counter < fileSize){
         read_index(valFile,hashNum,&index);
         read_val(keyAndValFile,index,valString);
+
         if(strcmp(valString,argv[2]) == 0){
             read_key(keyAndValFile,index,keyString);
             fclose(keyAndValFile);

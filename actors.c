@@ -6,6 +6,7 @@
 
 void val2KeyMiniVersion(int fileSize, FILE * valFile, FILE * keyAndValFile, char * whatToLookFor);
 int key2ValMiniVersion(int fileSize, FILE * keyFile, FILE * keyAndValFile, char * whatToLookFor);
+
 int main(int argc, char * argv[]){
     if(argc != 2){
         fprintf( stderr, "Usage: %s 'search term'\n", argv[0]);
@@ -33,8 +34,7 @@ int main(int argc, char * argv[]){
     int switched = 0;
     
     val2KeyMiniVersion(fileSizeOfTitleBasicsValue,titleBasicsValue,titleBasicsKeyAndValues,argv[1]);
-    
-
+    hashNum = hashfn(argv[1],fileSizeOFPrincipalsKey);
     
     while( (counter < fileSizeOFPrincipalsKey)){
         read_index(titlePrincipalsKey,hashNum,&index);
@@ -43,8 +43,20 @@ int main(int argc, char * argv[]){
             foundOne = 1;
             read_val(titlePrincipalsKeyAndValues,index,valString);
             key2ValMiniVersion(fileSizeOfNameBasicsKey,nameBasicsKey,nameBasicsKeyAndValues,valString);  
+            hashNum++;
+            counter++;
+            if(hashNum >= fileSizeOFPrincipalsKey){
+                hashNum = 0;
+            }
         }
-        counter++;
+        else{
+            hashNum++;
+            counter++;
+            if(hashNum >= fileSizeOFPrincipalsKey){
+                hashNum = 0;
+            }
+        }
+        
     }
 
     fclose(titleBasicsKeyAndValues);

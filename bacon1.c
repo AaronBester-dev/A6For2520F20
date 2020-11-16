@@ -64,17 +64,17 @@ int main(int argc, char * argv[]){
         }
       
     }
-    printf("%s\n",keyOfKevinBacon);  
+    
 
     /*getting key of movie kevin bacon is in*/
 
     kevinBaconMovieHashNum = hashfn(keyOfKevinBacon,fileSizeOFPrincipalsValue);  
-    printf("%d\n",kevinBaconMovieHashNum);
+    
 
     while( (kevinBaconMovieCounter < fileSizeOFPrincipalsValue)){
         movieFound = 0;
         val2KeyMiniVersion(titlePrincipalsValue,titlePrincipalsKeyAndValues,keyOfKevinBacon,kevinBaconMovieHashNum,kevinBaconMovieKey);
-        printf("%s\n",kevinBaconMovieKey);
+        
         
         kevinBaconMovieHashNum++;
         kevinBaconMovieCounter++;
@@ -93,7 +93,6 @@ int main(int argc, char * argv[]){
             actorFound = 0;
             getNextMovie = 0;
             while( (peopleInMovieCounter < fileSizeOFPrincipalsKey) && getNextMovie == 0){
-                
                 key2ValMiniVersion(titlePrincipalsKey,titlePrincipalsKeyAndValues,kevinBaconMovieKey,peopleInMovieHashNum,actorKey);
                 peopleInMovieHashNum++;
                 peopleInMovieCounter++;
@@ -101,7 +100,6 @@ int main(int argc, char * argv[]){
                     peopleInMovieHashNum = 0;
                 }
                 
-
                 if(strcmp(actorKey,"NOT FOUND") != 0){
                     actorFound = 1;
                     /*Getting key of movie if person exists in it*/
@@ -117,9 +115,6 @@ int main(int argc, char * argv[]){
                         getNextMovie = 1;
                     }
                 }
-    
-            
-           
             }
         }
     }
@@ -138,7 +133,7 @@ void val2KeyMiniVersion(FILE * valFile, FILE * keyAndValFile, char * whatToLookF
 
     int index = 0;
     int weGotEM = 0;
-    char valString[256];
+    char valString[STRLEN];
 
     read_index(valFile,hashNum,&index);
     read_val(keyAndValFile,index,valString);
@@ -153,7 +148,7 @@ void val2KeyMiniVersion(FILE * valFile, FILE * keyAndValFile, char * whatToLookF
 void key2ValMiniVersion(FILE * keyFile, FILE * keyAndValFile, char * whatToLookFor,int  hashNum, char * whereToPutIt){
 
     int index = 0;
-    char keyString[256];
+    char keyString[STRLEN];
 
     read_index(keyFile,hashNum,&index);
     read_key(keyAndValFile,index,keyString);

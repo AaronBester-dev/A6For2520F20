@@ -29,7 +29,7 @@ int main(int argc, char * argv[]){
 
     fileSize = get_capacity(keyFile);
     hashNum = hashfn(argv[2],fileSize);
-    printf("%s\n",fileName);
+
     while(counter < fileSize){
         read_index(keyFile,hashNum,&index);
         read_key(keyAndValFile,index,keyString);
