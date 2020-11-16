@@ -4,8 +4,10 @@
 #include "hashfn.h"
 #include "util.h"
 
-void val2KeyMiniVersion(int fileSize, FILE * valFile, FILE * keyAndValFile, char * whatToLookFor,int hashNum,char * whereToPutIt);
-void key2ValMiniVersion(int fileSize, FILE * keyFile, FILE * keyAndValFile, char * whatToLookFor,int hashNum, char * whereToPutIt);
+void val2KeyMiniVersion(FILE * valFile, FILE * keyAndValFile, char * whatToLookFor,int hashNum,char * whereToPutIt);
+void key2ValMiniVersion(FILE * keyFile, FILE * keyAndValFile, char * whatToLookFor,int  hashNum, char * whereToPutIt);
+
+
 int main(int argc, char * argv[]){
     if(argc != 2){
         fprintf( stderr, "Usage: %s 'search term'\n", argv[0]);
@@ -23,101 +25,115 @@ int main(int argc, char * argv[]){
 
     int fileSizeOFPrincipalsValue = get_capacity(titlePrincipalsValue);
     int fileSizeOfNameBasicsValue = get_capacity(nameBasicsValues);
-    int fileSizeOfTitleBasicsValue = get_capacity(titleBasicsValue);
-    int fileSizeOfNameBasicsKey = get_capacity(titleBasicsKey);
     int fileSizeOFPrincipalsKey = get_capacity(titlePrincipalsKey);
-
+    int fileSizeOfTitleBasicsKey = get_capacity(titleBasicsKey);
     int hashNum = 0; 
-    char whatToLookFor[256] = "Kevin Bacon";
-    char whereToPutIt[256];
-    char tempString[256];
+    int kevinBaconMovieHashNum = 0;
+    int peopleInMovieHashNum = 0;
+    int kevinBaconMovieCounter = 0;
+    int peopleInMovieCounter = 0;
+    int movieFound = 0;
+    int actorFound = 0;
+    int exitProgram = 0;
+    int getNextMovie = 0;
+    char kevinBaconMovieKey[256];
+    char keyOfKevinBacon[256];
     char keyOfActorWhoStarsWithKevinBacon[256];
     char keyOfMovieKevinBaconIsIn[256];
+    char actorKey[256];
+    char movieTheyAreBothIn[256];
  
     /*Getting users person key*/
     hashNum = hashfn(argv[1],fileSizeOfNameBasicsValue);
-    val2KeyMiniVersion(fileSizeOfNameBasicsValue,nameBasicsValues,nameBasicsKeyAndValues,argv[1],&hashNum,keyOfActorWhoStarsWithKevinBacon);
+    val2KeyMiniVersion(nameBasicsValues,nameBasicsKeyAndValues,argv[1],hashNum,keyOfActorWhoStarsWithKevinBacon);
 
     /*Getting kevin bacons key*/
-    hashNum = hashfn(whatToLookFor,fileSizeOfNameBasicsValue);
-    val2KeyMiniVersion(fileSizeOfNameBasicsValue,nameBasicsValues,nameBasicsKeyAndValues,whatToLookFor,&hashNum,whereToPutIt);
+    hashNum = hashfn("Kevin Bacon",fileSizeOfNameBasicsValue);
+    val2KeyMiniVersion(nameBasicsValues,nameBasicsKeyAndValues,"Kevin Bacon",hashNum,keyOfKevinBacon);
 
 
     /*getting key of movie kevin bacon is in*/
-    swapStrings(whatToLookFor,whereToPutIt);
-    hashNum = hashfn(whatToLookFor,fileSizeOfNameBasicsValue)
-    val2KeyMiniVersion(fileSizeOFPrincipalsValue,titleBasicsValue,titlePrincipalsKeyAndValues,whatToLookFor,&hashNum,whereToPutIt);
-    strcpy(keyOfMovieKevinBaconIsIn,whereToPutIt);
 
-    /*getting key of people in said movie*/
-    swapStrings(whatToLookFor,whereToPutIt);
-    hashNum = hashfn(whatToLookFor,fileSizeOfTitleBasicsKey);
-    key2ValMiniVersion(fileSizeOFPrincipalsKey,titlePrincipalsKey,titlePrincipalsKeyAndValues,whatToLookFor,&hashNum,whereToPutIt);
+    kevinBaconMovieHashNum = hashfn(keyOfKevinBacon,fileSizeOFPrincipalsValue);  
 
-    swapStrings(whatToLookFor,whereToPutIt);
-    if(strcmp(whatToLookFor,keyOfActorWhoStarsWithKevinBacon) == 0){
-        hashNum = (keyOfMovieKevinBaconIsIn,fileSizeOfTitleBasicsKey)
-        key2ValMiniVersion(fileSizeOfTitleBasicsKey,titleBasicsKey,titleBasicsKeyAndValues,keyOfMovieKevinBaconIsIn,&hashNum,whereToPutIt);
-        printf("%s\n"whereToPutIt);
-        return(0);
-    }
-    
-    
-
-}
-
-void val2KeyMiniVersion(int fileSize, FILE * valFile, FILE * keyAndValFile, char * whatToLookFor,int * hashNum,char * whereToPutIt){
-    int counter = 0;
-    int index = 0;
-    char valString[256];
-    int foundOne = 0;
-
-    while(counter < fileSize && foundOne != 1){
-        read_index(valFile,hashNum,&index);
-        read_val(keyAndValFile,index,valString);
-        if(strcmp(valString,whatToLookFor) == 0){
-            read_key(keyAndValFile,index,whereToPutIt);
-            foundOne = 1;
+    while( (kevinBaconMovieCounter < fileSizeOFPrincipalsValue) && exitProgram == 0){
+        movieFound = 0;
+        val2KeyMiniVersion(titlePrincipalsValue,titlePrincipalsKeyAndValues,keyOfKevinBacon,kevinBaconMovieHashNum,kevinBaconMovieKey);
+        kevinBaconMovieHashNum++;
+        kevinBaconMovieCounter++;
+        if(kevinBaconMovieHashNum >= fileSizeOFPrincipalsValue){
+            kevinBaconMovieHashNum = 0;
         }
-        else{
-            hashNum++;
-            counter++;
-            if(hashNum >= fileSize){
-                hashNum = 0;
+        if(movieFound == 1 && strcmp(kevinBaconMovieKey,"NOT FOUND") == 0){
+            exitProgram = 1;
+        }
+        
+        if(strcmp(kevinBaconMovieKey,"NOT FOUND") != 0){
+            movieFound = 1;
+            /*getting key of people in said movie*/
+            peopleInMovieHashNum = hashfn(kevinBaconMovieKey,fileSizeOFPrincipalsKey);
+            peopleInMovieCounter = 0;
+            actorFound = 0;
+            getNextMovie = 0;
+            while( (peopleInMovieCounter < fileSizeOFPrincipalsKey) && getNextMovie == 0){
+                
+                key2ValMiniVersion(titlePrincipalsKey,titlePrincipalsKeyAndValues,kevinBaconMovieKey,peopleInMovieHashNum,actorKey);
+                peopleInMovieHashNum++;
+                peopleInMovieCounter++;
+                if(peopleInMovieHashNum >= fileSizeOFPrincipalsKey){
+                    peopleInMovieHashNum = 0;
+                }
+                if(actorFound == 1 && strcmp(actorKey,"NOT FOUND") == 0){
+                    getNextMovie = 1;
+                }
+
+                if(strcmp(actorKey,"NOT FOUND") != 0){
+                    actorFound = 1;
+                    
+                    if(strcmp(actorKey,keyOfActorWhoStarsWithKevinBacon) == 0){
+                        peopleInMovieHashNum = hashfn(kevinBaconMovieKey,fileSizeOfTitleBasicsKey);
+                        key2ValMiniVersion(titleBasicsKey,titleBasicsKeyAndValues,kevinBaconMovieKey,peopleInMovieHashNum,movieTheyAreBothIn);
+                        printf("%s\n",movieTheyAreBothIn);
+                        return(0);
+                    }
+                }
+    /*Getting key of movie if person exists in it*/
+            
+           
             }
         }
     }
-    strcpy(whereToPutIt,"NOTHING FOUND");
+    
+
 }
 
-void key2ValMiniVersion(int fileSize, FILE * keyFile, FILE * keyAndValFile, char * whatToLookFor,int * hashNum, char * whereToPutIt){
-    int counter = 0;
+void val2KeyMiniVersion(FILE * valFile, FILE * keyAndValFile, char * whatToLookFor,int hashNum,char * whereToPutIt){
+
+    int index = 0;
+    char valString[256];
+
+    read_index(valFile,hashNum,&index);
+    read_val(keyAndValFile,index,valString);
+    if(strcmp(valString,whatToLookFor) == 0){
+        read_key(keyAndValFile,index,whereToPutIt);
+    }
+    else{
+        strcpy(whereToPutIt,"NOT FOUND");
+    }    
+}
+
+void key2ValMiniVersion(FILE * keyFile, FILE * keyAndValFile, char * whatToLookFor,int  hashNum, char * whereToPutIt){
+
     int index = 0;
     char keyString[256];
-    char valString[256];
-    int foundOne = 0;
 
-     while(counter < fileSize && foundOne != 1){
-        read_index(keyFile,hashNum,&index);
-        read_key(keyAndValFile,index,keyString);
-        if(strcmp(keyString,whatToLookFor) == 0){
-            read_val(keyAndValFile,index,whereToPutIt);
-            foundOne = 1;
-        }
-        else{
-            hashNum++;
-            counter++;
-            if(hashNum >= fileSize){
-                hashNum = 0;
-            }
-        }
+    read_index(keyFile,hashNum,&index);
+    read_key(keyAndValFile,index,keyString);
+    if(strcmp(keyString,whatToLookFor) == 0){
+        read_val(keyAndValFile,index,whereToPutIt);
     }
-    strcpy(whereToPutIt,"NOTHING FOUND");
+    else{
+        strcpy(whereToPutIt,"NOT FOUND");
+    }
 }
 
-void swapStrings(char * string1, char * string2){
-    char  tempString[256];
-    strcpy(tempString,string1);
-    strcpy(string1,string2);
-    strcpy(string2,tempString);
-}
