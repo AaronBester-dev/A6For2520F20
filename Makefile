@@ -40,4 +40,4 @@ bacon1: bacon1.o hashfn.o util.o
 	$(CC) $(CFLAGS) bacon1.o hashfn.o util.o -o bacon1 -g
 
 clean:
-	rm -i *.o buildidx key2val val2key actors bacon1 
+	rm -i *.o buildidx key2val val2key actors bacon1 *.khs *.vhs

@@ -12,9 +12,9 @@ int main(int argc, char * argv[]){
         exit(-1);
     }
     
-    char fileName[strlen(argv[1])+1];
-    char keyString[256];
-    char valString[256];
+    char fileName[strlen(argv[1])+5];
+    char keyString[STRLEN];
+    char valString[STRLEN];
     int fileSize = 0;
     FILE * keyAndValFile;
     FILE * valFile;
@@ -25,7 +25,6 @@ int main(int argc, char * argv[]){
     keyAndValFile = fopen(argv[1],"rb");
     getFilename(argv[1],".vhs",fileName);
     valFile = fopen(fileName,"rb");
-
     fileSize = get_capacity(valFile);
  
     hashNum = hashfn(argv[2],fileSize);
@@ -35,9 +34,9 @@ int main(int argc, char * argv[]){
         read_val(keyAndValFile,index,valString);
         if(strcmp(valString,argv[2]) == 0){
             read_key(keyAndValFile,index,keyString);
-            printf("%s\n",keyString);
             fclose(keyAndValFile);
             fclose(valFile);
+            printf("%s\n",keyString);
             return(0);
         }
         else{
@@ -56,6 +55,6 @@ int main(int argc, char * argv[]){
 
 void getFilename(char * fileName,char * fileExtension,char * placeToStoreFileName){
     strcpy(placeToStoreFileName,fileName);
-    placeToStoreFileName[strlen(fileName)-4] = '\0';
+    placeToStoreFileName[strlen(fileName)-3] = '\0';
     strcat(placeToStoreFileName,fileExtension);
 }

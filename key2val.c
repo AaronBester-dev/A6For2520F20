@@ -12,7 +12,7 @@ int main(int argc, char * argv[]){
         exit(-1);
     }
     
-    char fileName[strlen(argv[1])+1];
+    char fileName[strlen(argv[1])+5];
     char keyString[STRLEN];
     char valString[STRLEN];
     int fileSize = 0;
@@ -29,7 +29,7 @@ int main(int argc, char * argv[]){
 
     fileSize = get_capacity(keyFile);
     hashNum = hashfn(argv[2],fileSize);
-    
+    printf("%s\n",fileName);
     while(counter < fileSize){
         read_index(keyFile,hashNum,&index);
         read_key(keyAndValFile,index,keyString);
@@ -56,6 +56,6 @@ int main(int argc, char * argv[]){
 
 void getFilename(char * fileName,char * fileExtension,char * placeToStoreFileName){
     strcpy(placeToStoreFileName,fileName);
-    placeToStoreFileName[strlen(fileName)-4] = '\0';
+    placeToStoreFileName[strlen(fileName)-3] = '\0';
     strcat(placeToStoreFileName,fileExtension);
 }

@@ -13,12 +13,11 @@ int main(int argc, char * argv[]){
         exit(-1);
     }
     else{
-        char fileName[strlen(argv[1])+1];
+        char fileName[strlen(argv[1])+5];
         char * capacityString = argv[2];
-        char * tempPtr;
         char keyString[STRLEN];
         char valueString[STRLEN];
-        long capacity = strtol(capacityString,&tempPtr,10);
+        long capacity = strtol(capacityString,NULL,10);
         int i = 0;
         int index = 0;
         unsigned int keyHashNum = 0;
@@ -29,10 +28,13 @@ int main(int argc, char * argv[]){
        
         if((keyAndValueFile = fopen(argv[1],"rb")) != NULL){
             getFilename(argv[1],".khs",fileName);
-            keyFile = fopen(fileName,"wb+");
-            getFilename(argv[1],".vhs",fileName);
             
+            keyFile = fopen(fileName,"wb+");
+
+            getFilename(argv[1],".vhs",fileName);
             valueFile = fopen(fileName,"wb+");
+             
+            
             write_empty(keyFile,capacity);
             write_empty(valueFile,capacity);
          
@@ -49,7 +51,6 @@ int main(int argc, char * argv[]){
                         keyHashNum = 0;
                     }
                 }
-
                 write_index(keyFile,i,keyHashNum);
                 index = i;
                 read_index(valueFile,valHashNum,&index); 
@@ -77,7 +78,11 @@ int main(int argc, char * argv[]){
 }
 
 void getFilename(char * fileName,char * fileExtension,char * placeToStoreFileName){
-    strcpy(placeToStoreFileName,fileName);
-    placeToStoreFileName[strlen(fileName)-4] = '\0';
+   
+    strcpy(placeToStoreFileName,fileName);        
+    placeToStoreFileName[strlen(fileName)-3] = '\0';
     strcat(placeToStoreFileName,fileExtension);
+    
+    
+
 }

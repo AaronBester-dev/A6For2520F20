@@ -39,7 +39,6 @@ int main(int argc, char * argv[]){
     while( (counter < fileSizeOFPrincipalsKey)){
         read_index(titlePrincipalsKey,hashNum,&index);
         read_key(titlePrincipalsKeyAndValues,index,keyString);
-        printf("%s\n",keyString);
         if(strcmp(keyString,argv[1]) == 0){
             foundOne = 1;
             read_val(titlePrincipalsKeyAndValues,index,valString);
@@ -67,7 +66,6 @@ int key2ValMiniVersion(int fileSize, FILE * keyFile, FILE * keyAndValFile, char 
     hashNum = hashfn(whatToLookFor,fileSize);
     
      while(counter < fileSize){
-       
         read_index(keyFile,hashNum,&index);
         read_key(keyAndValFile,index,keyString);
         if(strcmp(keyString,whatToLookFor) == 0){
